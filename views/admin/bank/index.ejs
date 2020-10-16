@@ -16,11 +16,19 @@
 
         <!-- Begin Page Content -->
         <div class="container-fluid">
-
+          <%- include('../../partials/message.ejs') %>
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Bank</h1>
-            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+            <h1 class="h3 mb-0 text-gray-800">Category</h1>
+            <!-- Button trigger modal -->
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-toggle="modal"
+              data-target="#addModal"
+            >
+              Tambah <i class="fas fa-plus-circle"></i>
+            </button>
           </div>
 
           <%- include('table.ejs') %>
@@ -63,8 +71,25 @@
       </div>
     </div>
   </div>
+  <%- include('modal__add.ejs') %>
+  <%- include('modal__edit.ejs') %>
 
   <%- include('../../partials/scripts.ejs') %>
+
+  <script>
+    $('#dataTable').on('click', '.button-update', function () {
+      let id = $(this).data('id');
+      let nameBank = $(this).data('namebank');
+      let nomorRekening = $(this).data('nomorrekening');
+      let name = $(this).data('name');
+      // let image = $(this).data('image');
+      $('#editModal').modal('show');
+      $('.id').val(id);
+      $('.nameBank').val(nameBank);
+      $('.nomorRekening').val(nomorRekening);
+      $('.name').val(name);
+    })
+  </script>
 
 </body>
 

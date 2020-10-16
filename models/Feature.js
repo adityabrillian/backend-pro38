@@ -15,4 +15,4 @@ const featureSchema = new mongoose.Schema({
     }
 })
 
-module.exports = mongoos.model('Feature', featureSchema)
+module.exports = mongoose.model('Feature', featureSchema)

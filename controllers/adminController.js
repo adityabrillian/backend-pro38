@@ -1,5 +1,11 @@
 // Import Model
 const Category = require('../models/Category');
+const Bank = require('../models/Bank');
+// const Item = require('../models/Item');
+// const Booking = require('../models/Booking');
+
+const fs = require('fs-extra');
+const path = require('path');
 
 module.exports = {
   viewDashboard: (req, res) => {
@@ -35,7 +41,7 @@ module.exports = {
       req.flash('alertStatus', 'success');
       res.redirect('/admin/category');
     } catch (error) {
-      req.flash('alertMessage', `$error.message`);
+      req.flash('alertMessage', `${error.message}`);
       req.flash('alertStatus', 'danger');
       res.redirect('/admin/category');
     }
@@ -52,7 +58,7 @@ module.exports = {
       req.flash('alertStatus', 'success');
       res.redirect('/admin/category');
     } catch (error) {
-      req.flash('alertMessage', `$error.message`);
+      req.flash('alertMessage', `${error.message}`);
       req.flash('alertStatus', 'danger');
       res.redirect('/admin/category');
     }
@@ -68,14 +74,96 @@ module.exports = {
       req.flash('alertStatus', 'success');
       res.redirect('/admin/category');
     } catch (error) {
-      req.flash('alertMessage', `$error.message`);
+      req.flash('alertMessage', `${error.message}`);
       req.flash('alertStatus', 'danger');
       res.redirect('/admin/category');
     }
   },
 
-  viewBank: (req, res) => {
-    res.render('admin/bank/index', { title: 'PRO38 Admin | Bank' });
+  viewBank: async (req, res) => {
+    try {
+      const bank = await Bank.find();
+      const alertMessage = req.flash('alertMessage');
+      const alertStatus = req.flash('alertStatus');
+      const alert = {
+        message: alertMessage,
+        status: alertStatus,
+      };
+      // console.log(bank);
+      res.render('admin/bank/index', {
+        bank,
+        alert,
+        title: 'PRO38 Admin | Bank',
+      });
+    } catch (error) {
+      res.redirect('/admin/bank');
+    }
+  },
+
+  addBank: async (req, res) => {
+    try {
+      const { name, nameBank, nomorRekening } = req.body;
+      await Bank.create({
+        name,
+        nameBank,
+        nomorRekening,
+        imageUrl: `images/${req.file.filename}`,
+      });
+      req.flash('alertMessage', 'Sukses Menambah Bank Baru');
+      req.flash('alertStatus', 'success');
+      res.redirect('/admin/bank');
+    } catch (error) {
+      req.flash('alertMessage', `${error.message}`);
+      req.flash('alertStatus', 'danger');
+      res.redirect('/admin/bank');
+    }
+  },
+
+  editBank: async (req, res) => {
+    try {
+      const { id, name, nameBank, nomorRekening } = req.body;
+      const bank = await Bank.findOne({ _id: id });
+      console.log(nameBank);
+      if (req.file == undefined) {
+        bank.nameBank = nameBank;
+        bank.nomorRekening = nomorRekening;
+        bank.name = name;
+        await bank.save();
+        req.flash('alertMessage', 'Sukses Update Bank');
+        req.flash('alertStatus', 'success');
+        res.redirect('/admin/bank');
+      } else {
+        await fs.unlink(path.join(`public/${bank.imageUrl}`));
+        bank.nameBank = nameBank;
+        bank.nomorRekening = nomorRekening;
+        bank.name = name;
+        await bank.save();
+        req.flash('alertMessage', 'Sukses Update Bank');
+        req.flash('alertStatus', 'success');
+        res.redirect('/admin/bank');
+      }
+    } catch (error) {
+      console.log(error);
+      req.flash('alertMessage', `${error.message}`);
+      req.flash('alertStatus', 'danger');
+      res.redirect('/admin/bank');
+    }
+  },
+
+  deleteBank: async (req, res) => {
+    try {
+      const { id } = req.params;
+      // console.log(id);
+      const bank = await Bank.findOne({ _id: id });
+      await bank.remove();
+      req.flash('alertMessage', 'Bank Telah Terhapus');
+      req.flash('alertStatus', 'success');
+      res.redirect('/admin/bank');
+    } catch (error) {
+      req.flash('alertMessage', `${error.message}`);
+      req.flash('alertStatus', 'danger');
+      res.redirect('/admin/bank');
+    }
   },
 
   viewItem: (req, res) => {

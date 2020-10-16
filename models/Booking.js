@@ -50,4 +50,4 @@ const bookingSchema = new mongoose.Schema({
     },
 })
 
-module.exports = mongoos.model('Booking', bookingSchema)
+module.exports = mongoose.model('Booking', bookingSchema)
