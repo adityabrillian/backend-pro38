@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { ObjectId } = mongoose.Schema;
 
 const itemSchema = new mongoose.Schema({
     title: {
@@ -18,7 +19,8 @@ const itemSchema = new mongoose.Schema({
         required: true
     },
     isPopular: {
-        type: Boolean
+        type: Boolean,
+        default: false
     },
     description: {
         type: String,
@@ -35,6 +37,10 @@ const itemSchema = new mongoose.Schema({
     activityId: [{
         type: ObjectId,
         ref: 'Activity'
+    }],
+    categoryId: [{
+        type: ObjectId,
+        ref: 'Category'
     }],
 })
 

@@ -33,13 +33,21 @@ const storage = multer.diskStorage({
   }
 });
 
-const upload = multer({
+const uploadSingle = multer({
   storage: storage,
-  limits: { fileSize: 1000000 }, // maksimal upload 1mb (1000000)
+  limits: { fileSize: 1000000 }, // maksimal uploadSingle 1mb (1000000)
   fileFilter: function (req, file, cb) {
     checkFileType(file, cb);
   }
 }).single("image"); // ini harus cocok dg <input name= pada image form
+
+const uploadMulti = multer({
+  storage: storage,
+  limits: { fileSize: 1000000 }, // maksimal uploadSingle 1mb (1000000)
+  fileFilter: function (req, file, cb) {
+    checkFileType(file, cb);
+  }
+}).array("image"); // ini harus cocok dg <input name= pada image form
 
 // // Check file Type
 function checkFileType(file, cb) {
@@ -58,5 +66,5 @@ function checkFileType(file, cb) {
   }
 }
 
-// module.exports = { uploadMultiple, upload };
-module.exports = { upload };
+// module.exports = { uploadSingleMultiple, uploadSingle };
+module.exports = { uploadMulti, uploadSingle };

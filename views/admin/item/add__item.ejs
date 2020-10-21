@@ -1,0 +1,44 @@
+<div
+  class="tab-pane fade"
+  id="add__item"
+  role="tabpanel"
+  aria-labelledby="profile-tab"
+>
+  <form action="/admin/item" method="POST" enctype="multipart/form-data">
+    <div class="form-group">
+      <label for="name">Title</label>
+      <input required name="title" type="text" class="form-control" />
+    </div>
+
+    <div class="form-group">
+      <label for="name">Price</label>
+      <input required name="price" type="number" class="form-control" min="0" />
+    </div>
+
+    <div class="form-group">
+      <label for="name">City</label>
+      <input required name="city" type="text" class="form-control" min="0" />
+    </div>
+    <div class="form-group">
+      <label for="name">Category</label>
+      <select name="categoryId" class="form-control">
+        <option value="">--- Category ---</option>
+        <% for(let i = 0; i< category.length; i++) {%>
+          <option value="<%= category[i].id %>"><%= category[i].name %></option>
+        <%}%>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="name">Image</label>
+      <input required multiple name="image" type="file" class="form-control" />
+    </div>
+
+    <div class="form-group">
+      <label for="name">Description</label>
+      <textarea name="about" class="form-control"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Tambah</button>
+  </form>
+</div>
