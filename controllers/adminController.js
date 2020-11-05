@@ -3,6 +3,7 @@ const Category = require('../models/Category');
 const Bank = require('../models/Bank');
 const Item = require('../models/Item');
 const Image = require('../models/Image');
+const Feature = require('../models/Feature');
 // const Booking = require('../models/Booking');
 
 const fs = require('fs-extra');
@@ -102,8 +103,8 @@ module.exports = {
   },
 
   addBank: async (req, res) => {
+    const { name, nameBank, nomorRekening } = req.body;
     try {
-      const { name, nameBank, nomorRekening } = req.body;
       await Bank.create({
         name,
         nameBank,
@@ -209,7 +210,7 @@ module.exports = {
           city,
         };
         const item = await Item.create(newItem);
-        console.log(item);
+        // console.log(item);
         category.itemId.push({ _id: item._id }); // ditable category menambahkan row itemId
         await category.save();
         for (let i = 0; i < req.files.length; i++) {
@@ -368,6 +369,57 @@ module.exports = {
       req.flash('alertMessage', `${error.message}`);
       req.flash('alertStatus', 'danger');
       res.redirect('/admin/item');
+    }
+  },
+
+  viewDetailItem: async (req, res) => {
+    const { itemId } = req.params;
+    try {
+      const alertMessage = req.flash('alertMessage');
+      const alertStatus = req.flash('alertStatus');
+      const alert = {
+        message: alertMessage,
+        status: alertStatus,
+      };
+      res.render('admin/item/detail__item/view_detail_item', {
+        title: 'PRO38 Admin | Detail Item',
+        alert,
+        itemId,
+      });
+    } catch (error) {
+      req.flash('alertMessage', `${error.message}`);
+      req.flash('alertStatus', 'danger');
+      res.redirect(`/admin/item/show_detail_item/${itemId}`);
+    }
+  },
+
+  addFeature: async (req, res) => {
+    const { name, qty, itemId } = req.body;
+    try {
+      if (!req.file) {
+        req.flash('alertMessage', 'Image not found');
+        req.flash('alertStatus', 'danger');
+        res.redirect(`/admin/item/show-detail-item/${itemId}`);
+      }
+      const feature = await Feature.create({
+        name,
+        qty,
+        itemId,
+        imageUrl: `images/${req.file.filename}`,
+      });
+
+      //logika dimana table child menambahkan id foregirKey di parent table
+      const item = await Item.findOne({ _id: itemId });  
+      item.featureId.push({ _id: feature._id });
+      await item.save();
+
+      req.flash('alertMessage', 'Sukses Menambah Feature Baru');
+      req.flash('alertStatus', 'success');
+      res.redirect(`/admin/item/show-detail-item/${itemId}`);
+    } catch (error) {
+      req.flash('alertMessage', `${error.message}`);
+      req.flash('alertStatus', 'danger');
+      res.redirect(`/admin/item/show-detail-item/${itemId}`);
     }
   },
 

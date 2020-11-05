@@ -21,6 +21,9 @@ router.get('/item/:id', adminController.showEditItem);
 router.put('/item/:id', uploadMulti, adminController.editItem);
 router.delete('/item/:id/delete', adminController.deleteItem);
 
+router.get('/item/show-detail-item/:itemId', adminController.viewDetailItem);
+router.post('/item/add/feature', uploadSingle, adminController.addFeature);
+
 // router.get('/booking', adminController.viewBooking);
 // router.post('/booking', adminController.addBooking);
 // router.put('/booking', adminController.editBooking);
