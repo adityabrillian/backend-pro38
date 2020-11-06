@@ -1,7 +1,12 @@
 const router = require('express').Router();
 const adminController = require('../controllers/adminController');
 const { uploadSingle, uploadMulti } = require('../middlewares/multer');
+const auth = require('../middlewares/auth');
 
+router.get('/signin', adminController.viewSignin);
+router.post('/signin', adminController.actionSignin);
+router.use(auth); // line 8 kebawah harus login terlebih dahulu
+router.get('/logout', adminController.actionLogout);
 router.get('/dashboard', adminController.viewDashboard);
 
 router.get('/category', adminController.viewCategory);
