@@ -8,7 +8,7 @@
       <div class="row">
         <div class="col-md-5">
           <form
-            action="/admin/bank"
+            action="/admin/item/add/activity"
             method="POST"
             enctype="multipart/form-data"
           >
@@ -37,6 +37,8 @@
               <input required name="image" type="file" class="form-control" />
             </div>
 
+            <input type="hidden" name="itemId" value="<%= itemId %>">
+
             <button type="submit" class="btn btn-primary">Simpan</button>
           </form>
         </div>
@@ -58,7 +60,38 @@
                 </tr>
               </thead>
 
-              <tbody></tbody>
+              <tbody>
+                <% for (let i = 0; i < activity.length; i++) { %>
+                <tr>
+                  <td><%= i + 1 %></td>
+                  <td><%= activity[i].name %></td>
+                  <td><%= activity[i].type %></td>
+                  <td>
+                    <img src="http://localhost:3030/<%= activity[i].imageUrl %>" alt="imageUrl" height="70px" width="70px"> 
+                  </td>
+                  <td>
+                    <form
+                      action="/admin/item/<%= itemId %>/activity/<%= activity[i].id %>?_method=DELETE"
+                      method="POST"
+                    >
+                      <a
+                        href="javascript:void()"
+                        type="button"
+                        class="btn-warning btn-circle btn-sm button-update"
+                        data-id="<%= activity[i].id %>"
+                        data-name="<%= activity[i].name %>"
+                        data-type="<%= activity[i].type %>"
+                      >
+                        <i class="fas fa-edit"></i>
+                      </a>
+                      <button type="submit" class="btn-danger btn-circle btn-sm">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </form>
+                  </td>
+                </tr>
+                <%}%>
+              </tbody>
             </table>
           </div>
         </div>
