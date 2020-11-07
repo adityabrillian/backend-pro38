@@ -5,6 +5,8 @@ const Item = require('../models/Item');
 const Image = require('../models/Image');
 const Feature = require('../models/Feature');
 const Activity = require('../models/Activity');
+const Booking = require('../models/Booking');
+const Member = require('../models/Member');
 const Users = require('../models/Users');
 // const Booking = require('../models/Booking');
 
@@ -29,7 +31,6 @@ module.exports = {
       } else {
         res.redirect('/admin/dashboard');
       }
-      
     } catch (error) {
       res.redirect('/admin/signin');
     }
@@ -52,12 +53,12 @@ module.exports = {
         req.flash('alertStatus', 'danger');
         res.redirect('/admin/signin');
       }
-      
+
       // Autentikasi
       req.session.user = {
         id: user.id,
-        username: user.username
-      }
+        username: user.username,
+      };
       // END Autentikasi
 
       res.redirect('/admin/dashboard');
@@ -71,16 +72,19 @@ module.exports = {
     res.redirect('/admin/signin');
   },
 
-  viewDashboard: (req, res) => {
+  viewDashboard: async (req, res) => {
     try {
-      res.render('admin/dashboard/index', { 
+      const member = await Member.find()
+      const booking = await Booking.find()
+      const item = await Item.find()
+      res.render('admin/dashboard/index', {
         title: 'PRO38 Admin | Dashboard',
-        user: req.session.user
-       });
-      
-    } catch (error) {
-      
-    }
+        user: req.session.user,
+        member,
+        booking,
+        item
+      });
+    } catch (error) {}
   },
 
   viewCategory: async (req, res) => {
@@ -97,7 +101,7 @@ module.exports = {
         category,
         alert,
         title: 'PRO38 Admin | Category',
-        user: req.session.user
+        user: req.session.user,
       });
     } catch (error) {
       res.redirect('/admin/category');
@@ -166,7 +170,7 @@ module.exports = {
         bank,
         alert,
         title: 'PRO38 Admin | Bank',
-        user: req.session.user
+        user: req.session.user,
       });
     } catch (error) {
       res.redirect('/admin/bank');
@@ -259,7 +263,7 @@ module.exports = {
         alert,
         item,
         action: 'view',
-        user: req.session.user
+        user: req.session.user,
       });
     } catch (error) {
       req.flash('alertMessage', `${error.message}`);
@@ -463,7 +467,7 @@ module.exports = {
         itemId,
         feature,
         activity,
-        user: req.session.user
+        user: req.session.user,
       });
     } catch (error) {
       req.flash('alertMessage', `${error.message}`);
@@ -650,10 +654,71 @@ module.exports = {
     }
   },
 
-  viewBooking: (req, res) => {
-    res.render('admin/booking/index', { 
-      title: 'PRO38 Admin | Booking',
-      user: req.session.user
-     });
+  viewBooking: async (req, res) => {
+    try {
+      const booking = await Booking.find()
+        .populate('memberId')
+        .populate('bankId');
+      // console.log(booking); // untuk melihat apa saja di dalam model Booking
+      res.render('admin/booking/index', {
+        title: 'PRO38 Admin | Booking',
+        user: req.session.user,
+        booking,
+      });
+    } catch (error) {
+      res.redirect('/admin/booking');
+    }
+  },
+
+  showDetailBooking: async (req, res) => {
+    const { id } = req.params;
+    try {
+      const alertMessage = req.flash('alertMessage');
+      const alertStatus = req.flash('alertStatus');
+      const alert = {
+        message: alertMessage,
+        status: alertStatus,
+      };
+
+      const booking = await Booking.findOne({ _id: id })
+        .populate('memberId')
+        .populate('bankId');
+      res.render('admin/booking/show_detail_booking', {
+        title: 'PRO38 Admin | Detail Booking',
+        user: req.session.user,
+        booking,
+        alert
+      });
+    } catch (error) {
+      res.redirect('/admin/booking');
+    }
+  },
+
+  actionConfirmation: async (req, res) => {
+    const { id } = req.params;
+    try {
+      const booking = await Booking.findOne({ _id: id });
+      booking.payments.status = 'Accept';
+      req.flash('alertMessage', 'Bukti bayar terkonfirmasi');
+      req.flash('alertStatus', 'success');
+      await booking.save();
+      res.redirect(`/admin/booking/${id}`);
+    } catch (error) {
+      res.redirect(`/admin/booking/${id}`);
+    }
+  },
+
+  actionReject: async (req, res) => {
+    const { id } = req.params;
+    try {
+      const booking = await Booking.findOne({ _id: id });
+      booking.payments.status = 'Rejected';
+      req.flash('alertMessage', 'Bukti bayar berhasil di reject');
+      req.flash('alertStatus', 'danger');
+      await booking.save();
+      res.redirect(`/admin/booking/${id}`);
+    } catch (error) {
+      res.redirect(`/admin/booking/${id}`);
+    }
   },
 };
