@@ -11,7 +11,7 @@ const bookingSchema = new mongoose.Schema({
     required: true,
   },
   invoice: {
-    type: Date,
+    type: String,
     required: true,
   },
   itemId: {
@@ -60,7 +60,7 @@ const bookingSchema = new mongoose.Schema({
     },
     status: {
       type: String,
-      required: true,
+      default: 'Proses',
     },
   },
 });
