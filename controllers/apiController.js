@@ -19,9 +19,9 @@ module.exports = {
         .limit(3)
         .populate({
           path: 'itemId',
-          select: '_id title country city isPopular imageId',
-          perDocumentLimit: 4, //perDocumentLimit adalah limit dalam populate
-          option: { sort: { sumBooking: -1 } }, // membuat sort descending -1 : desc, 1 : asc
+          select: '_id title country city isPopular  imageId',
+          perDocumentLimit: 4,
+          option: { sort: { sumBooking: -1 } },
           populate: {
             path: 'imageId',
             select: '_id imageUrl',
@@ -174,7 +174,7 @@ module.exports = {
         _id: item.id,
         title: item.title,
         price: item.price,
-        duration: item.duration,
+        duration: duration, // ini kenapa tidak dari item??
       },
 
       memberId: member.id,
@@ -188,6 +188,6 @@ module.exports = {
     const booking = await Booking.create(newBooking);
     // await booking.save();
 
-    res.status(201).json({ message: 'Sukses Booking' });
+    res.status(201).json({ message: 'Sukses Booking', booking });
   },
 };
