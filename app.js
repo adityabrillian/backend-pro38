@@ -8,7 +8,7 @@ const session = require('express-session');
 const flash = require('connect-flash');
 // Import Mongoose
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/pro38', {
+mongoose.connect('mongodb+srv://aditnoris:backendpro38@cluster0.lmf93.mongodb.net/pro38?retryWrites=true&w=majority', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,

@@ -1,7 +1,4 @@
-<div
-  class="tab-pane fade show active"
-  id="show-activity"
->
+<div class="tab-pane fade show active" id="show-activity">
   <!-- DataTales Example -->
   <div class="card shadow mb-4 mt-2">
     <div class="card-body">
@@ -37,7 +34,7 @@
               <input required name="image" type="file" class="form-control" />
             </div>
 
-            <input type="hidden" name="itemId" value="<%= itemId %>">
+            <input type="hidden" name="itemId" value="<%= itemId %>" />
 
             <button type="submit" class="btn btn-primary">Simpan</button>
           </form>
@@ -67,7 +64,12 @@
                   <td><%= activity[i].name %></td>
                   <td><%= activity[i].type %></td>
                   <td>
-                    <img src="http://localhost:3030/<%= activity[i].imageUrl %>" alt="imageUrl" height="70px" width="70px"> 
+                    <img
+                      src="https://admin-pro38.herokuapp.com/<%= activity[i].imageUrl %>"
+                      alt="imageUrl"
+                      height="70px"
+                      width="70px"
+                    />
                   </td>
                   <td>
                     <form
@@ -84,7 +86,10 @@
                       >
                         <i class="fas fa-edit"></i>
                       </a>
-                      <button type="submit" class="btn-danger btn-circle btn-sm">
+                      <button
+                        type="submit"
+                        class="btn-danger btn-circle btn-sm"
+                      >
                         <i class="fas fa-trash"></i>
                       </button>
                     </form>

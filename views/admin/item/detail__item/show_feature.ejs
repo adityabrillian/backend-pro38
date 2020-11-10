@@ -14,7 +14,7 @@
             method="POST"
             enctype="multipart/form-data"
           >
-            <input type="hidden" value="<%= itemId %>" name="itemId"/>
+            <input type="hidden" value="<%= itemId %>" name="itemId" />
             <div class="form-group">
               <label for="name" class="col-form-label">Name</label>
               <input
@@ -68,7 +68,12 @@
                   <td><%= feature[i].name %></td>
                   <td><%= feature[i].qty %></td>
                   <td>
-                    <img src="http://localhost:3030/<%= feature[i].imageUrl %>" alt="imageUrl" height="70px" width="70px"> 
+                    <img
+                      src="https://admin-pro38.herokuapp.com/<%= feature[i].imageUrl %>"
+                      alt="imageUrl"
+                      height="70px"
+                      width="70px"
+                    />
                   </td>
                   <td>
                     <form
@@ -85,7 +90,10 @@
                       >
                         <i class="fas fa-edit"></i>
                       </a>
-                      <button type="submit" class="btn-danger btn-circle btn-sm">
+                      <button
+                        type="submit"
+                        class="btn-danger btn-circle btn-sm"
+                      >
                         <i class="fas fa-trash"></i>
                       </button>
                     </form>

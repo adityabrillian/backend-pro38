@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 
 // Connect to MongoDB via Mongoose
 seeder.connect(
-  'mongodb://localhost:27017/pro38',
+  'mongodb+srv://aditnoris:backendpro38@cluster0.lmf93.mongodb.net/pro38?retryWrites=true&w=majority',
   {
     useNewUrlParser: true,
     useCreateIndex: true,
